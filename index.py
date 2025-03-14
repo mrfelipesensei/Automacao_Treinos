@@ -29,11 +29,11 @@ def gerar_treino():
         treino_dia['Cárdio'] = [random.choice(exercicios['Cárdio'])]
 
         #Definir a ordem aleatória dos grupos musculares
-        grupos_musculares = [grupo for grupo in exercicios.key() if grupo != 'Cárdio']
+        grupos_musculares = [grupo for grupo in exercicios.keys() if grupo != 'Cárdio']
         random.shuffle(grupos_musculares)
 
         #Preencher os treinos de musculação
-        for grupo in grupos_musculares:
+        for grupo in grupos_musculares[:5]:
             treino_dia[grupo] = random.sample(exercicios[grupo],2)
 
         treino_semanal[dia] = treino_dia
@@ -51,4 +51,19 @@ def mostrar_treino():
         treino_texto += "\n"
 
     resultado_texto.delete(1.0,tk.END) #Limpar a área de texto
-    resultado_texto.insert()
+    resultado_texto.insert(tk.END,treino_texto) #Exibir o treino gerado
+
+#Criando a interface gráfica
+root = tk.Tk()
+root.title("Automação de Treinos")
+
+#Botão para gerar treino
+gerar_button = tk.Button(root,text="Gerar Treino",command=mostrar_treino)
+gerar_button.pack(pady=20)
+
+#Área de texto para exibir o treino
+resultado_texto = tk.Text(root,width=50,height=15)
+resultado_texto.pack(pady=10)
+
+
+root.mainloop()
