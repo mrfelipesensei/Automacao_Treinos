@@ -1,3 +1,4 @@
+import tkinter as tk
 import random
 
 #Grupos musculares e exercícios
@@ -38,3 +39,16 @@ def gerar_treino():
         treino_semanal[dia] = treino_dia
 
     return treino_semanal
+
+def mostrar_treino():
+    treino = gerar_treino()
+    treino_texto = ""
+
+    for dia, treino_dia in treino.items():
+        treino_texto += f"{dia}:\n"
+        for grupo, exercicios in treino_dia.items():
+            treino_texto += f" {grupo}: {', '.join(exercicios)}\n"
+        treino_texto += "\n"
+
+    resultado_texto.delete(1.0,tk.END) #Limpar a área de texto
+    resultado_texto.insert()
