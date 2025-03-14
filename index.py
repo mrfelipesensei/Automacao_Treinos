@@ -14,3 +14,27 @@ exercicios = {
     'Cárdio' : ['Corrida','Pular Corda','Funcional','Elíptico']
 
 }
+
+#Definindo os dias da semana para os treinos
+dias_semana = ['Segunda','Terça','Quarta','Quinta','Sexta','Sábado']
+
+def gerar_treino():
+    treino_semanal = {}
+
+    for dia in dias_semana:
+        treino_dia = {}
+
+        #Inclui cárdio todos os dias
+        treino_dia['Cárdio'] = [random.choice(exercicios['Cárdio'])]
+
+        #Definir a ordem aleatória dos grupos musculares
+        grupos_musculares = [grupo for grupo in exercicios.key() if grupo != 'Cárdio']
+        random.shuffle(grupos_musculares)
+
+        #Preencher os treinos de musculação
+        for grupo in grupos_musculares:
+            treino_dia[grupo] = random.sample(exercicios[grupo],2)
+
+        treino_semanal[dia] = treino_dia
+
+    return treino_semanal
