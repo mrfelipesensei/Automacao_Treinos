@@ -13,7 +13,6 @@ exercicios = {
     'Trapézio': ['Remada Alta','Encolhimento Ombro','Face Pull'],
     'Abdominal': ['Reto','Bicicleta','Rotação Russa','Prancha','Alpinista'],
     'Cárdio' : ['Corrida','Pular Corda','Funcional','Elíptico']
-
 }
 
 #Definindo os dias da semana para os treinos
@@ -21,7 +20,8 @@ dias_semana = ['Segunda','Terça','Quarta','Quinta','Sexta','Sábado']
 
 def gerar_treino():
     treino_semanal = {}
-
+    treino_grupos = {grupo: 0 for grupo in exercicios.keys() if grupo != 'Cárdio'}
+    
     for dia in dias_semana:
         treino_dia = {}
 
@@ -34,11 +34,25 @@ def gerar_treino():
 
         #Preencher os treinos de musculação
         for grupo in grupos_musculares[:5]:
-            treino_dia[grupo] = random.sample(exercicios[grupo],2)
+            if treino_grupos[grupo] < 2: #Garantir que cada grupo faça 2 treinos por semana
+                treino_dia[grupo] = random.sample(exercicios[grupo],2) #2 exercícios por grupo
+                treino_grupos[grupo] += 1 #Marcar que o grupo foi treinado
 
         treino_semanal[dia] = treino_dia
 
-    return treino_semanal
+    
+    #Garantir o intervalo de 1 dia entre os grupos
+    for grupo in treino_grupos:
+        if treino_grupos[grupo] < 2:
+            #Redistribuir para garantir 2 treinos por grupo
+            for dia in dias_semana:
+                if grupo not in treino_semanal[dia]:
+                    treino_semanal[dia][grupo] = random.sample(exercicios[grupo],2)
+                    treino_grupos[grupo] += 1
+                    break
+
+        return treino_semanal
+
 
 def mostrar_treino():
     treino = gerar_treino()
