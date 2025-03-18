@@ -43,39 +43,18 @@ def gerar_estrategia():
     return estrategia
 
 def gerar_treino():
-    treino_semanal = {}
-    treino_grupos = {grupo: 0 for grupo in exercicios.keys() if grupo != 'Cárdio'}
-    
-    for dia in dias_semana:
-        treino_dia = {}
+    estrategia_treino = gerar_estrategia() #Gera a estrategia dos treinos
+    treino_semanal = {} #Cria o dicionário para armazenar os treinos de cada dia
 
-        #Inclui cárdio todos os dias
-        treino_dia['Cárdio'] = [random.choice(exercicios['Cárdio'])]
+    for i, dia in enumerate(dias_semana):
+        treino_dia = {"Cárdio": [random.choice(exercicios["Cárdio"])]} #Escolhe um Cárdio para o dia
+        for grupo in estrategia_treino[dia]:
+            treino_dia[grupo] = random.sample(exercicios[grupo], 2) #Escolhe 2 exercícios para o grupo muscular
+        treino_semanal[dia] = treino_dia #Adiciona o treino do dia ao treino semanal
 
-        #Definir a ordem aleatória dos grupos musculares
-        grupos_musculares = [grupo for grupo in exercicios.keys() if grupo != 'Cárdio']
-        random.shuffle(grupos_musculares)
+    return treino_semanal
 
-        #Preencher os treinos de musculação
-        for grupo in grupos_musculares[:5]:
-            if treino_grupos[grupo] < 2: #Garantir que cada grupo faça 2 treinos por semana
-                treino_dia[grupo] = random.sample(exercicios[grupo],2) #2 exercícios por grupo
-                treino_grupos[grupo] += 1 #Marcar que o grupo foi treinado
 
-        treino_semanal[dia] = treino_dia
-
-    
-    #Garantir o intervalo de 1 dia entre os grupos
-    for grupo in treino_grupos:
-        if treino_grupos[grupo] < 2:
-            #Redistribuir para garantir 2 treinos por grupo
-            for dia in dias_semana:
-                if grupo not in treino_semanal[dia]:
-                    treino_semanal[dia][grupo] = random.sample(exercicios[grupo],2)
-                    treino_grupos[grupo] += 1
-                    break
-
-        return treino_semanal
 
 
 def mostrar_treino():
@@ -100,7 +79,7 @@ gerar_button = tk.Button(root,text="Gerar Treino",command=mostrar_treino)
 gerar_button.pack(pady=20)
 
 #Área de texto para exibir o treino
-resultado_texto = tk.Text(root,width=50,height=15)
+resultado_texto = tk.Text(root,width=60,height=15)
 resultado_texto.pack(pady=10)
 
 
