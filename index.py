@@ -45,19 +45,26 @@ def gerar_estrategia():
 def gerar_treino():
     estrategia_treino = gerar_estrategia() #Gera a estrategia dos treinos
     treino_semanal = {} #Cria o dicionário para armazenar os treinos de cada dia
+    cardio_anterior = None #Evitar repetições consecutivas de cárdio
 
     for i, dia in enumerate(dias_semana):
-        treino_dia = {"Cárdio": [random.choice(exercicios["Cárdio"])]} #Escolhe um Cárdio para o dia
+        treino_dia = {} 
+
+        #Escolher um Cárdio diferente do dia anterior
+        opcoes_cardio = [c for c in exercicios["Cárdio"] if c != cardio_anterior]
+        treino_dia["Cárdio"] = [random.choice(opcoes_cardio)]
+        cardio_anterior = treino_dia["Cárdio"][0] #Atualiza o cárdio do dia anterior
+
         for grupo in estrategia_treino[dia]:
             treino_dia[grupo] = random.sample(exercicios[grupo], 2) #Escolhe 2 exercícios para o grupo muscular
         treino_semanal[dia] = treino_dia #Adiciona o treino do dia ao treino semanal
 
-    #Garantir que o sábado tenha 4 grupos musculares e que não repita grupos do dia anterior (sexta-feira)
-    if dia == "Sábado":
-        disponiveis = [g for g in list(exercicios.keys()) if g != "Cárdio" and g not in estrategia_treino["Sexta"]]
-        escolhidos_sabado = random.sample(disponiveis, 4)
-        for grupo in escolhidos_sabado:
-            treino_dia[grupo] = random.sample(exercicios[grupo],2)
+    #Garantir que o Sábado tenha 4 grupos musculares diferentes de Sexta
+    grupos_disponiveis = [g for g in exercicios.keys() if g != "Cárdio" and g not in estrategia_treino["Sexta"]]
+    if len(grupos_disponiveis) >= 4:
+        grupos_sabado = random.sample(grupos_disponiveis, 4)
+        treino_semanal["Sábado"] = {grupo: random.sample(exercicios[grupo], 2) for grupo in grupos_sabado}
+        treino_semanal["Sábado"]["Cárdio"] = [random.choice(exercicios["Cárdio"])]
 
     return treino_semanal
 
