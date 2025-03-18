@@ -72,8 +72,11 @@ def mostrar_treino():
             treino_texto += f" {grupo}: {', '.join(exercicios)}\n"
         treino_texto += "\n"
 
-    resultado_texto.delete(1.0,tk.END) #Limpar a área de texto
-    resultado_texto.insert(tk.END,treino_texto) #Exibir o treino gerado
+    #Atualizar o contúedo da área de texto
+    resultado_texto.config(state=tk.NORMAL)
+    resultado_texto.delete(1.0,tk.END) #Limpa o conteúdo atual
+    resultado_texto.insert(tk.END, treino_texto) #Insere o novo conteúdo
+    resultado_texto.config(state=tk.DISABLED) #Impede a edição novamente
 
 #Criando a interface gráfica
 root = tk.Tk()
