@@ -5,7 +5,9 @@ import random
 exercicios = {
     'Peito': ['Crucifixo','Supino Sentado','Flexão de Braço','Flexão Declinada'],
     'Costas': ['Puxada Alta','Remada Baixa','Puxada Alta Triângulo','Remada Curvada'],
-    'Perna': ['Extensora','Agachamento','Stiff','Panturilha'],
+    'Quadriceps' : ['Extensora','Agachamento','Afundo','Agachamento Búlgaro'],
+    'Femoral' : ['Stiff','Cadeira Flexora','Levantamento Terra'],
+    'Panturrilha': ['Panturrilha em Pé','Panturrilha Sentado'],
     'Ombro': ['Desenvolvimento','Elevação Lateral','Elevação Frontal','Arnold Press'],
     'Bíceps': ['Rosca Direta','Rosca Alternada','Rosca Martelo'],
     'Tríceps': ['Tríceps Polia','Mergulho','Tríceps Testa'],
@@ -17,6 +19,13 @@ exercicios = {
 
 #Definindo os dias da semana para os treinos
 dias_semana = ['Segunda','Terça','Quarta','Quinta','Sexta','Sábado']
+
+def gerar_estrategia():
+    grupos = list(exercicios.keys())
+    grupos.remove("Cárdio")
+    random.shuffle(grupos)
+    return [grupos[i:i+4] for i in range(0,len(grupos),4)[:6]]
+
 
 def gerar_treino():
     treino_semanal = {}
