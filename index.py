@@ -52,9 +52,14 @@ def gerar_treino():
             treino_dia[grupo] = random.sample(exercicios[grupo], 2) #Escolhe 2 exercícios para o grupo muscular
         treino_semanal[dia] = treino_dia #Adiciona o treino do dia ao treino semanal
 
+    #Garantir que o sábado tenha 4 grupos musculares e que não repita grupos do dia anterior (sexta-feira)
+    if dia == "Sábado":
+        disponiveis = [g for g in list(exercicios.keys()) if g != "Cárdio" and g not in estrategia_treino["Sexta"]]
+        escolhidos_sabado = random.sample(disponiveis, 4)
+        for grupo in escolhidos_sabado:
+            treino_dia[grupo] = random.sample(exercicios[grupo],2)
+
     return treino_semanal
-
-
 
 
 def mostrar_treino():
@@ -79,7 +84,7 @@ gerar_button = tk.Button(root,text="Gerar Treino",command=mostrar_treino)
 gerar_button.pack(pady=20)
 
 #Área de texto para exibir o treino
-resultado_texto = tk.Text(root,width=60,height=15)
+resultado_texto = tk.Text(root,width=60,height=30)
 resultado_texto.pack(pady=10)
 
 
