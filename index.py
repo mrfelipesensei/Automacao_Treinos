@@ -21,11 +21,26 @@ exercicios = {
 dias_semana = ['Segunda','Terça','Quarta','Quinta','Sexta','Sábado']
 
 def gerar_estrategia():
-    grupos = list(exercicios.keys())
-    grupos.remove("Cárdio")
-    random.shuffle(grupos)
-    return [grupos[i:i+4] for i in range(0,len(grupos),4)[:6]]
+    grupos = list(exercicios.keys()) #Cria uma lista com todos os grupos musculares
+    grupos.remove("Cárdio") #O Cárdio será tratado separadamente
+    random.shuffle(grupos) #Embaralha a lista de grupos musculares
 
+    estrategia = {dia: [] for dia in dias_semana} #Cria um dicionário para armazenar os treinos dos dias
+
+    contagem = {grupo: 0 for grupo in grupos} #Contador para verificar quantas vezes um grupo foi escolhido
+
+    #Para cada dia da semana
+    for dia in dias_semana:
+        #A lista de grupos disponíveis para o treino do dia, com base nos treinos que ainda não foram escolhidos duas vezes
+        disponiveis = [g for g in grupos if contagem[g]<2 and not any(g in estrategia[d] for d in [dias_semana[dias_semana.index(dia)-1] if dias_semana.index(dia) > 0 else dia])]
+
+        if len(disponiveis) >= 4: #Se houver pelo menos 4 grupos musculares disponíveis
+            escolhidos = random.sample(disponiveis,4) #Escolhe aleatoriamente 4 grupos
+            estrategia[dia].extend(escolhidos) #Adiciona os grupos ao treino do dia
+            for g in escolhidos:
+                contagem[g] += 1 #Marca que esse grupo foi escolhido
+
+    return estrategia
 
 def gerar_treino():
     treino_semanal = {}
